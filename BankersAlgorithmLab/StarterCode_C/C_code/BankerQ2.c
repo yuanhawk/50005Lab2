@@ -94,7 +94,7 @@ void printState() {
 	printf("Maximum:\n");
 	for (i=0; i<numberOfCustomers; i++){
 		for (j=0; j<numberOfResources; j++){
-			printf("%d ", maximum[i][j]); // Leave a space bettern each print 
+			printf("%d ", maximum[i][j]); // Leave a space between each print 
 		}
 		printf("\n"); // Leave a line after each customer 
 	}
@@ -104,7 +104,7 @@ void printState() {
 	printf("Allocation:\n");
 	for (i=0; i<numberOfCustomers; i++){
 		for (j=0; j<numberOfResources; j++){
-			printf("%d ", allocation[i][j]); // Leave a space bettern each print 
+			printf("%d ", allocation[i][j]); // Leave a space between each print 
 		}
 		printf("\n"); // Leave a line after each customer 
 	} 
