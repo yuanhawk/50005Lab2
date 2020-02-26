@@ -160,6 +160,7 @@ int checkSafe(int customerIndex, int *request) {
  */
 int requestResources(int customerIndex, int *request) {
 	// TODO: print the request
+	printf("Customer %d requesting\n", customerIndex);
 	
 	// TODO: judge if request larger than need
 	
@@ -179,7 +180,7 @@ int requestResources(int customerIndex, int *request) {
  */
 void releaseResources(int customerIndex, int *release) {
 	// TODO: print the release
-
+	printf("Customer %d releasing\n", customerIndex);
 	// TODO: deal with release (:For simplicity, we do not judge the release request, just update directly)
 	
 }

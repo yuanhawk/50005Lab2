@@ -78,7 +78,8 @@ public class Banker {
 	 */
 	public synchronized boolean requestResources(int customerIndex, int[] request) {
 		// TODO: print the request
-		
+		System.out.println("Customer " + customerIndex + " requesting");
+        System.out.println(Arrays.toString(request));
 		// TODO: check if request larger than need
 		
 		// TODO: check if request larger than available
@@ -97,6 +98,8 @@ public class Banker {
 	 */
 	public synchronized void releaseResources(int customerIndex, int[] release) {
 		// TODO: print the release
+		System.out.println("Customer " + customerIndex + " releasing");
+		System.out.println(Arrays.toString(release));
 		
 		// TODO: release the resources from customer customerNumber
 		
