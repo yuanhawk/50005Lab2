@@ -1,5 +1,5 @@
 /**
- * CSE lab project 3 -- C version
+ * CSE lab project 2 -- C version
  * 
 **/
 
