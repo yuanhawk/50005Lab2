@@ -162,6 +162,11 @@ int checkSafe(int customerIndex, int *request) {
 int requestResources(int customerIndex, int *request) {
 	// TODO: print the request
 	printf("Customer %d requesting\n", customerIndex);
+	for (int i=0; i<numberOfResources; i++){
+		printf("%d ", request[i]); // Leave a space between each request 
+	}
+	printf("\n"); // Leave a line after each customer 
+	
 	
 	// TODO: judge if request larger than need
 	
