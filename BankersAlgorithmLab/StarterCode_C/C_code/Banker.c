@@ -68,8 +68,13 @@ void initBank(int *resources, int m, int n)
 	maximum = mallocIntMatrix(n, m);
 
 	// TODO: initialize the numberOfCustomers and numberOfResources
+	numberOfResources = m;
+	numberOfCustomers = n;
 
 	// TODO: initialize the available vector
+    for (int i = 0; i < numberOfResources; i++) {
+        available[i] = resources[i];
+    }
 }
 
 /**
@@ -146,6 +151,9 @@ void printState()
 void setMaximumDemand(int customerIndex, int *maximumDemand)
 {
 	// TODO: add customer, update maximum and need
+    for (int i = 0; i < numberOfResources; i++) {
+        maximum[customerIndex][i] = maximumDemand[i];
+    }
 }
 
 /**
@@ -183,10 +191,18 @@ int requestResources(int customerIndex, int *request)
 	for (int i = 0; i < numberOfResources; i++)
 	{
 		printf("%d ", request[i]); // Leave a space between each request
+		allocation[customerIndex][i] = request[i];
+        need[customerIndex][i] = maximum[customerIndex][i] - request[i];
+        available[i] -= request[i];
 	}
 	printf("\n"); // Leave a line after each customer
 
 	// TODO: judge if request larger than need
+
+//    for (int i = 0; i < numberOfResources; i++) {
+//        if (request[i] > need[customerIndex][i]) printf("%d, %d\n", request[i], need[customerIndex][i]);
+//    }
+
 
 	// TODO: judge if request larger than available
 
@@ -207,6 +223,14 @@ void releaseResources(int customerIndex, int *release)
 	// TODO: print the release
 	printf("Customer %d releasing\n", customerIndex);
 	// TODO: deal with release (:For simplicity, we do not judge the release request, just update directly)
+    for (int i = 0; i < numberOfResources; i++)
+    {
+        printf("%d ", release[i]); // Leave a space between each request
+        allocation[customerIndex][i] -= release[i];
+        need[customerIndex][i] = maximum[customerIndex][i] - allocation[customerIndex][i];
+        available[i] += release[i];
+    }
+    printf("\n"); // Leave a line after each customer
 }
 
 /**
