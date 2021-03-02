@@ -153,6 +153,7 @@ void setMaximumDemand(int customerIndex, int *maximumDemand)
 	// TODO: add customer, update maximum and need
     for (int i = 0; i < numberOfResources; i++) {
         maximum[customerIndex][i] = maximumDemand[i];
+        need[customerIndex][i] = maximumDemand[i];
     }
 }
 
@@ -170,9 +171,47 @@ int checkSafe(int customerIndex, int *request)
 	int **tempNeed = mallocIntMatrix(numberOfCustomers, numberOfResources);
 	int **tempAllocation = mallocIntMatrix(numberOfCustomers, numberOfResources);
 
+	// Init finish
+	int *finish = mallocIntVector(numberOfCustomers);
+    for (int i = 0; i < numberOfCustomers; i++) {
+        finish[i] = 0;
+    }
+
+    // Init work
+    for (int i = 0; i < numberOfResources; i++) {
+        work[i] = available[i] - request[i];
+    }
+
 	// TODO: copy the bank's state to the temporary memory and update it with the request.
+    for (int i = 0; i < numberOfCustomers; i++) {
+        for (int j = 0; j < numberOfResources; j++) {
+            if (i == customerIndex) {
+                tempAllocation[i][j] = allocation[i][j] + request[j];
+                tempNeed[i][j] = need[i][j] - request[j];
+            }
+        }
+    }
+
+    int possible;
+    do {
+        possible = 0;
+        for (int i = 0; i < numberOfCustomers; i++) {
+            if (finish[i] == 0) {
+                for (int j = 0; j < numberOfResources; j++) {
+                    if (tempNeed[i][j] < work[j]) {
+                        work[j] += tempAllocation[i][j];
+                        finish[i] = 1;
+                        possible = 1;
+                    }
+                }
+            }
+        }
+    } while (possible);
 
 	// TODO: check if the new state is safe
+    for (int i = 0; i < numberOfCustomers; i++) {
+        if (finish[i] == 0) return 0;
+    }
 
 	return 1;
 }
@@ -186,31 +225,31 @@ int checkSafe(int customerIndex, int *request)
  */
 int requestResources(int customerIndex, int *request)
 {
-	// TODO: print the request
-	printf("Customer %d requesting\n", customerIndex);
-	for (int i = 0; i < numberOfResources; i++)
-	{
-		printf("%d ", request[i]); // Leave a space between each request
-		allocation[customerIndex][i] = request[i];
-        need[customerIndex][i] = maximum[customerIndex][i] - request[i];
+    // TODO: print the request
+    printf("Customer %d requesting\n", customerIndex);
+    for (int i = 0; i < numberOfResources; i++)
+    {
+        printf("%d ", request[i]); // Leave a space between each request
+
+        // TODO: judge if request larger than need
+        // TODO: judge if request larger than available
+        if (request[i] > need[customerIndex][i] || request[i] > available[i]) return 0;
+    }
+    printf("\n"); // Leave a line after each customer
+
+
+    // TODO: judge if the new state is safe if grants this request (for question 2)
+    if (checkSafe(customerIndex, request) != 1) return 0;
+
+    // TODO: request is granted, update state
+    for (int i = 0; i < numberOfResources; i++)
+    {
+        allocation[customerIndex][i] += request[i];
+        need[customerIndex][i] -= request[i];
         available[i] -= request[i];
-	}
-	printf("\n"); // Leave a line after each customer
+    }
 
-	// TODO: judge if request larger than need
-
-//    for (int i = 0; i < numberOfResources; i++) {
-//        if (request[i] > need[customerIndex][i]) printf("%d, %d\n", request[i], need[customerIndex][i]);
-//    }
-
-
-	// TODO: judge if request larger than available
-
-	// TODO: judge if the new state is safe if grants this request (for question 2)
-
-	// TODO: request is granted, update state
-
-	return 1;
+    return 1;
 }
 
 /**
@@ -227,7 +266,7 @@ void releaseResources(int customerIndex, int *release)
     {
         printf("%d ", release[i]); // Leave a space between each request
         allocation[customerIndex][i] -= release[i];
-        need[customerIndex][i] = maximum[customerIndex][i] - allocation[customerIndex][i];
+        need[customerIndex][i] += release[i];
         available[i] += release[i];
     }
     printf("\n"); // Leave a line after each customer
